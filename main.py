@@ -1,5 +1,6 @@
 import pygame
 import random
+from meursault_skills import MeursaultSkill
 
 # Setting up fonts
 pygame.init()
@@ -82,6 +83,10 @@ def clash_calculate(ally_coins, ally_coin_power, ally_base_power, ally_sanity,
             print("Ally did", damage_dealt, "damage.")
 
 
+meursault_s1 = MeursaultSkill(25, 25, "S1")
+meursault_s2 = MeursaultSkill(25, 160, "S2")
+meursault_s3 = MeursaultSkill(25, 300, "S3")
+
 clash_calculate(3, 4, 4, 0,
                 4, 3, 4, 0)
 
@@ -97,6 +102,10 @@ while run:
 
         if event.type == pygame.QUIT:  # If user clicked close
             run = False
+
+    screen.blit(meursault_s1.image, meursault_s1.rect)
+    screen.blit(meursault_s2.image, meursault_s2.rect)
+    screen.blit(meursault_s3.image, meursault_s3.rect)
 
     pygame.display.update()
 
