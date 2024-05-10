@@ -1,6 +1,7 @@
 import pygame
 import random
 from meursault_skills import MeursaultSkill
+from trash_crab_skills import TrashCrabSkill
 
 # Setting up fonts
 pygame.init()
@@ -9,7 +10,7 @@ my_font = pygame.font.SysFont('Calibri', 16)
 pygame.display.set_caption("Limbus Company Clash Simulation")
 
 # Setting up the window
-size = (800, 450)
+size = (1200, 675)
 screen = pygame.display.set_mode(size)
 screen.fill((100, 100, 100))
 run = True
@@ -83,12 +84,16 @@ def clash_calculate(ally_coins, ally_coin_power, ally_base_power, ally_sanity,
             print("Ally did", damage_dealt, "damage.")
 
 
+meursault = pygame.image.load("Meursault.png")
 meursault_s1 = MeursaultSkill(25, 25, "S1")
-meursault_s2 = MeursaultSkill(25, 160, "S2")
-meursault_s3 = MeursaultSkill(25, 300, "S3")
+meursault_s2 = MeursaultSkill(25, 285, "S2")
+meursault_s3 = MeursaultSkill(25, 545, "S3")
 
-clash_calculate(3, 4, 4, 0,
-                4, 3, 4, 0)
+trash_crab = pygame.image.load("Trash Crab.png")
+trash_crab_gwah = TrashCrabSkill(1075, 20, "Gwah")
+trash_crab_gwaaah = TrashCrabSkill(1075, 195, "Gwaaah")
+trash_crab_shell_tackle = TrashCrabSkill(1075, 370, "Shell Tackle")
+trash_crab_foaming = TrashCrabSkill(1075, 545, "Foaming")
 
 # Plan: Have Meursault's three skills to the left of him, and the trash cab's skills to the right of it.
 # Clicking on the appropriate skill would have that skill be used, and the associated animation if the attack hits.
@@ -103,9 +108,16 @@ while run:
         if event.type == pygame.QUIT:  # If user clicked close
             run = False
 
+    screen.blit(meursault, (150, 400))
     screen.blit(meursault_s1.image, meursault_s1.rect)
     screen.blit(meursault_s2.image, meursault_s2.rect)
     screen.blit(meursault_s3.image, meursault_s3.rect)
+
+    screen.blit(trash_crab, (800, 450))
+    screen.blit(trash_crab_gwah.image, trash_crab_gwah.rect)
+    screen.blit(trash_crab_gwaaah.image, trash_crab_gwaaah.rect)
+    screen.blit(trash_crab_shell_tackle.image, trash_crab_shell_tackle.rect)
+    screen.blit(trash_crab_foaming.image, trash_crab_foaming.rect)
 
     pygame.display.update()
 
