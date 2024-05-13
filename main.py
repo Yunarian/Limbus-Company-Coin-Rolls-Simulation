@@ -1,5 +1,7 @@
 import pygame
 import random
+from meursault import Meursault
+from trash_crab import TrashCrab
 from meursault_skills import MeursaultSkill
 from trash_crab_skills import TrashCrabSkill
 
@@ -84,12 +86,12 @@ def clash_calculate(ally_coins, ally_coin_power, ally_base_power, ally_sanity,
             print("Ally did", damage_dealt, "damage.")
 
 
-meursault = pygame.image.load("Meursault.png")
+meursault = Meursault(150, 400)
 meursault_s1 = MeursaultSkill(25, 25, "S1")
 meursault_s2 = MeursaultSkill(25, 285, "S2")
 meursault_s3 = MeursaultSkill(25, 545, "S3")
 
-trash_crab = pygame.image.load("Trash Crab.png")
+trash_crab = TrashCrab(800, 450)
 trash_crab_gwah = TrashCrabSkill(1075, 20, "Gwah")
 trash_crab_gwaaah = TrashCrabSkill(1075, 195, "Gwaaah")
 trash_crab_shell_tackle = TrashCrabSkill(1075, 370, "Shell Tackle")
@@ -103,17 +105,32 @@ while run:
     for event in pygame.event.get():  # User did something
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
-                print("a")
+                # Mouse click detection with meursault + his skills
+                if meursault.rect.collidepoint(event.pos):
+                    print("Meursault.")
+
+                if meursault_s1.rect.collidepoint(event.pos):
+                    print("S1")
+
+                if meursault_s2.rect.collidepoint(event.pos):
+                    print("S2")
+
+                if meursault_s3.rect.collidepoint(event.pos):
+                    print("S3")
+
+                # Mouse click detection with trash crab + their skills
+                if trash_crab.rect.collidepoint(event.pos):
+                    print("Meursault.")
 
         if event.type == pygame.QUIT:  # If user clicked close
             run = False
 
-    screen.blit(meursault, (150, 400))
+    screen.blit(meursault.image, meursault.rect)
     screen.blit(meursault_s1.image, meursault_s1.rect)
     screen.blit(meursault_s2.image, meursault_s2.rect)
     screen.blit(meursault_s3.image, meursault_s3.rect)
 
-    screen.blit(trash_crab, (800, 450))
+    screen.blit(trash_crab.image, trash_crab.rect)
     screen.blit(trash_crab_gwah.image, trash_crab_gwah.rect)
     screen.blit(trash_crab_gwaaah.image, trash_crab_gwaaah.rect)
     screen.blit(trash_crab_shell_tackle.image, trash_crab_shell_tackle.rect)
