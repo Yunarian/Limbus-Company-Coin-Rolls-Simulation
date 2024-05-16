@@ -20,9 +20,9 @@ run = True
 
 # Functions used in the pygame loop
 # Takes a tuple and an integer as parameters.
-# The first two elements of the tuple generate which side of the coin was rolled.
-# The next two generate what power the coins rolled should have.
-# skill_attributes = coins, coin_power, base_power
+# the last element of the tuple and sanity generate which side of the coin was rolled.
+# The first two elements of the tuple generate which values were rolled
+# skill_attributes = (coins, coin_power, base_power)
 def coin_rolls(sanity, skill_attributes):
     coin_side_roll = []
 
@@ -44,37 +44,35 @@ def coin_rolls(sanity, skill_attributes):
     return attack_rolls
 
 
-print(coin_rolls(0, (3, 4, 4)))
-
-# takes 8 integer parameters, with each side of the clash having 4 parameters
-# Gonna try to change this to take a tuple for the coins, coin power, and base power.
-def clash_calculate(ally_sanity, ally_coins, ally_coin_power, ally_base_power,
-                    enemy_sanity, enemy_coins, enemy_coin_power, enemy_base_power):
+# takes 4 parameters, with _sanity being integers, and _skill_attributes being lists
+# ally_skill_attributes = (ally_coins, ally_coin_power, ally_base_power)
+# enemy_skill_attributes = (enemy_coins, enemy_coin_power, enemy_base_power)
+def clash_calculate(ally_sanity, ally_skill_attributes, enemy_sanity, enemy_skill_attributes):
     damage_dealt = 0
 
-    while ally_coins != 0 and enemy_coins != 0:
-        ally_attack_rolls = coin_rolls(ally_coins, ally_sanity, ally_coin_power, ally_base_power)
-        enemy_attack_rolls = coin_rolls(enemy_coins, enemy_sanity, enemy_coin_power, enemy_base_power)
+    while ally_skill_attributes[0] != 0 and enemy_skill_attributes[0] != 0:
+        ally_attack_rolls = coin_rolls(ally_sanity, ally_skill_attributes)
+        enemy_attack_rolls = coin_rolls(enemy_sanity, enemy_skill_attributes)
 
-        print("Ally Attack roll:", ally_attack_rolls[ally_coins - 1])
-        print("Enemy Attack roll:", enemy_attack_rolls[enemy_coins - 1])
+        print("Ally Attack roll:", ally_attack_rolls[ally_skill_attributes[0] - 1])
+        print("Enemy Attack roll:", enemy_attack_rolls[enemy_skill_attributes[0] - 1])
 
-        if ally_attack_rolls[ally_coins - 1] > enemy_attack_rolls[enemy_coins - 1]:
+        if ally_attack_rolls[ally_skill_attributes[0] - 1] > enemy_attack_rolls[enemy_skill_attributes[0] - 1]:
             print("Ally clash win. ")
-            enemy_coins -= 1
+            enemy_skill_attributes[0] -= 1
 
-        if ally_attack_rolls[ally_coins - 1] < enemy_attack_rolls[enemy_coins - 1]:
+        elif ally_attack_rolls[ally_skill_attributes[0] - 1] < enemy_attack_rolls[enemy_skill_attributes[0] - 1]:
             print("Enemy clash win. ")
-            ally_coins -= 1
+            ally_skill_attributes[0] -= 1
 
-        if ally_attack_rolls[ally_coins - 1] == enemy_attack_rolls[enemy_coins - 1]:
+        elif ally_attack_rolls[ally_skill_attributes[0] - 1] == enemy_attack_rolls[enemy_skill_attributes[0] - 1]:
             print("Tie. ")
 
         print()
 
     # Regenerates the coin rolls
-    if ally_coins == 0:
-        enemy_attack_rolls = coin_rolls(enemy_coins, enemy_sanity, enemy_coin_power, enemy_base_power)
+    if ally_skill_attributes[0] == 0:
+        enemy_attack_rolls = coin_rolls(enemy_sanity, enemy_skill_attributes)
         print("Enemy's attack goes through.")
 
         for i in range(len(enemy_attack_rolls)):
@@ -82,7 +80,7 @@ def clash_calculate(ally_sanity, ally_coins, ally_coin_power, ally_base_power,
             print("Enemy did", damage_dealt, "damage")
 
     else:
-        ally_attack_rolls = coin_rolls(ally_coins, ally_sanity, ally_coin_power, ally_base_power)
+        ally_attack_rolls = coin_rolls(ally_sanity, ally_skill_attributes)
         print("Ally's attack goes through. ")
 
         for i in range(len(ally_attack_rolls)):
@@ -94,18 +92,16 @@ meursault = Meursault(150, 400)
 meursault_s1 = MeursaultSkill(25, 25, "S1")
 meursault_s2 = MeursaultSkill(25, 285, "S2")
 meursault_s3 = MeursaultSkill(25, 545, "S3")
-# first element is s1, second is s2, third is s3
-meursault_skill_description_render = [False, False, False]
 
 trash_crab = TrashCrab(800, 450)
 trash_crab_gwah = TrashCrabSkill(1075, 20, "Gwah")
 trash_crab_gwaaah = TrashCrabSkill(1075, 195, "Gwaaah")
 trash_crab_shell_tackle = TrashCrabSkill(1075, 370, "Shell Tackle")
 trash_crab_foaming = TrashCrabSkill(1075, 545, "Foaming")
-# first is gwah, second is gwaaah, third is shell tackle, fourth is foaming.
+
+meursault_skill_description_render = [False, False, False]
 trash_crab_skill_description_render = [False, False, False, False]
 
-# Plan: Have Meursault's three skills to the left of him, and the trash cab's skills to the right of it.
 # Clicking on the appropriate skill would have that skill be used, and the associated animation if the attack hits.
 
 # Pygame loop
@@ -114,6 +110,7 @@ while run:
     for event in pygame.event.get():  # User did something
 
         # Mouse hover-over detection with Meursault's skills
+        # first element is s1, second is s2, third is s3
         meursault_skill_description_render = [False, False, False]
         if meursault_s1.rect.collidepoint(pygame.mouse.get_pos()):
             meursault_skill_description_render[0] = True
@@ -125,6 +122,7 @@ while run:
             meursault_skill_description_render[2] = True
 
         # Mouse hover-over detection with trash crab skills
+        # first is gwah, second is gwaaah, third is shell tackle, fourth is foaming.
         trash_crab_skill_description_render = [False, False, False, False]
         if trash_crab_gwah.rect.collidepoint(pygame.mouse.get_pos()):
             trash_crab_skill_description_render[0] = True
@@ -139,7 +137,7 @@ while run:
             trash_crab_skill_description_render[3] = True
 
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1:  # Mouse click detection with meursault + his skills
+            if event.button == 1:  # checking to see if the code is changing the lists
                 print(meursault_skill_description_render)
                 print(trash_crab_skill_description_render)
 
@@ -156,6 +154,10 @@ while run:
     screen.blit(trash_crab_gwaaah.image, trash_crab_gwaaah.rect)
     screen.blit(trash_crab_shell_tackle.image, trash_crab_shell_tackle.rect)
     screen.blit(trash_crab_foaming.image, trash_crab_foaming.rect)
+
+    if meursault_skill_description_render[0] is True:
+        # blit meursault's s1 description
+        print()
 
     pygame.display.update()
 
