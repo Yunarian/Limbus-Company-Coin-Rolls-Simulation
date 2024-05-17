@@ -108,7 +108,6 @@ trash_crab_skill_description_render = [False, False, False, False]
 while run:
 
     for event in pygame.event.get():  # User did something
-
         # Mouse hover-over detection with Meursault's skills
         # first element is s1, second is s2, third is s3
         meursault_skill_description_render = [False, False, False]
@@ -156,8 +155,25 @@ while run:
     screen.blit(trash_crab_foaming.image, trash_crab_foaming.rect)
 
     if meursault_skill_description_render[0] is True:
-        # blit meursault's s1 description
-        print()
+        screen.blit(pygame.image.load("Meursault S1 Description.png"), (300, 300))
+
+    if meursault_skill_description_render[1] is True:
+        screen.blit(pygame.image.load("Meursault S2 Description.png"), (400, 400))
+
+    if meursault_skill_description_render[2] is True:
+        screen.blit(pygame.image.load("Meursault S3 Description.png"), (500, 500))
+
+    if trash_crab_skill_description_render[0] is True:
+        screen.blit(pygame.image.load("Trash Crab Gwah Description.png"), (200, 200))
+
+    if trash_crab_skill_description_render[1] is True:
+        screen.blit(pygame.image.load("Trash Crab Gwaaah Description.png"), (200, 200))
+
+    if trash_crab_skill_description_render[2] is True:
+        screen.blit(pygame.image.load("Trash Crab Shell Tackle Description.png"), (200, 200))
+
+    if trash_crab_skill_description_render[3] is True:
+        screen.blit(pygame.image.load("Trash Crab Foaming Description.png"), (200, 200))
 
     pygame.display.update()
 
