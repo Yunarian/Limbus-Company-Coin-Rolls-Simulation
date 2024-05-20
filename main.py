@@ -2,8 +2,7 @@ import pygame
 import random
 from meursault import Meursault
 from trash_crab import TrashCrab
-from meursault_skills import MeursaultSkill
-from trash_crab_skills import TrashCrabSkill
+from attack_skills import AttackSkill
 
 # Setting up fonts
 pygame.init()
@@ -89,15 +88,21 @@ def clash_calculate(ally_sanity, ally_skill_attributes, enemy_sanity, enemy_skil
 
 
 meursault = Meursault(150, 400)
-meursault_s1 = MeursaultSkill(25, 25, "S1")
-meursault_s2 = MeursaultSkill(25, 285, "S2")
-meursault_s3 = MeursaultSkill(25, 545, "S3")
+meursault_s1 = AttackSkill(25, 25, "S1", "Meursault ")
+meursault_s2 = AttackSkill(25, 285, "S2", "Meursault ")
+meursault_s3 = AttackSkill(25, 545, "S3", "Meursault ")
+# Per tuple, the attributes go (coins, coin_power, base_power)
+# First tuple in the tuple is s1, second is s2, third is s3
+meursault_skills_attributes = ((2, 4, 3), (1, 9, 6), (4, 2, 4))
 
 trash_crab = TrashCrab(800, 450)
-trash_crab_gwah = TrashCrabSkill(1075, 20, "Gwah")
-trash_crab_gwaaah = TrashCrabSkill(1075, 195, "Gwaaah")
-trash_crab_shell_tackle = TrashCrabSkill(1075, 370, "Shell Tackle")
-trash_crab_foaming = TrashCrabSkill(1075, 545, "Foaming")
+trash_crab_gwah = AttackSkill(1075, 20, "Gwah", "Trash Crab ")
+trash_crab_gwaaah = AttackSkill(1075, 195, "Gwaaah", "Trash Crab ")
+trash_crab_shell_tackle = AttackSkill(1075, 370, "Shell Tackle", "Trash Crab ")
+trash_crab_foaming = AttackSkill(1075, 545, "Foaming", "Trash Crab ")
+# Per tuple, the attributes go (coins, coin_power, base_power)
+# First tuple in the tuple is Gwah, second is Gwaaah, third is Shell tackle, fourth is Foaming
+trash_crab_skill_attributes = ((2, 2, 2), (3, 2, 3), (1, 6, 3), (1, 7, 4))
 
 meursault_skill_description_render = [False, False, False]
 trash_crab_skill_description_render = [False, False, False, False]
@@ -136,12 +141,15 @@ while run:
             trash_crab_skill_description_render[3] = True
 
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1:  # checking to see if the code is changing the lists
-                print(meursault_skill_description_render)
-                print(trash_crab_skill_description_render)
+            if event.button == 1:
+                for i in range(len(meursault_skill_description_render)):
+                    if meursault_skill_description_render[i] is True:
+                        print(i)
 
         if event.type == pygame.QUIT:  # If user clicked close
             run = False
+
+    screen.fill((100, 100, 100))
 
     screen.blit(meursault.image, meursault.rect)
     screen.blit(meursault_s1.image, meursault_s1.rect)
@@ -155,25 +163,25 @@ while run:
     screen.blit(trash_crab_foaming.image, trash_crab_foaming.rect)
 
     if meursault_skill_description_render[0] is True:
-        screen.blit(pygame.image.load("Meursault S1 Description.png"), (300, 300))
+        screen.blit(pygame.image.load("Meursault S1 Description.png"), (200, 50))
 
     if meursault_skill_description_render[1] is True:
-        screen.blit(pygame.image.load("Meursault S2 Description.png"), (400, 400))
+        screen.blit(pygame.image.load("Meursault S2 Description.png"), (200, 50))
 
     if meursault_skill_description_render[2] is True:
-        screen.blit(pygame.image.load("Meursault S3 Description.png"), (500, 500))
+        screen.blit(pygame.image.load("Meursault S3 Description.png"), (200, 50))
 
     if trash_crab_skill_description_render[0] is True:
-        screen.blit(pygame.image.load("Trash Crab Gwah Description.png"), (200, 200))
+        screen.blit(pygame.image.load("Trash Crab Gwah Description.png"), (800, 50))
 
     if trash_crab_skill_description_render[1] is True:
-        screen.blit(pygame.image.load("Trash Crab Gwaaah Description.png"), (200, 200))
+        screen.blit(pygame.image.load("Trash Crab Gwaaah Description.png"), (800, 50))
 
     if trash_crab_skill_description_render[2] is True:
-        screen.blit(pygame.image.load("Trash Crab Shell Tackle Description.png"), (200, 200))
+        screen.blit(pygame.image.load("Trash Crab Shell Tackle Description.png"), (800, 50))
 
     if trash_crab_skill_description_render[3] is True:
-        screen.blit(pygame.image.load("Trash Crab Foaming Description.png"), (200, 200))
+        screen.blit(pygame.image.load("Trash Crab Foaming Description.png"), (800, 50))
 
     pygame.display.update()
 
