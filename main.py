@@ -107,6 +107,11 @@ trash_crab_skill_attributes = ((2, 2, 2), (3, 2, 3), (1, 6, 3), (1, 7, 4))
 meursault_skill_description_render = [False, False, False]
 trash_crab_skill_description_render = [False, False, False, False]
 
+meursault_skill_description_render_clicked = [False, False, False]
+meursault_skill_clicked = False
+trash_crab_skill_description_render_clicked = [False, False, False, False]
+trash_crab_skill_clciked = False
+
 # Clicking on the appropriate skill would have that skill be used, and the associated animation if the attack hits.
 
 # Pygame loop
@@ -144,6 +149,9 @@ while run:
             if event.button == 1:
                 for i in range(len(meursault_skill_description_render)):
                     if meursault_skill_description_render[i] is True:
+                        meursault_skill_clicked = True
+                        meursault_skill_description_render_clicked = [False, False, False]
+                        meursault_skill_description_render_clicked[i] = True
                         print(i)
 
         if event.type == pygame.QUIT:  # If user clicked close
@@ -162,13 +170,16 @@ while run:
     screen.blit(trash_crab_shell_tackle.image, trash_crab_shell_tackle.rect)
     screen.blit(trash_crab_foaming.image, trash_crab_foaming.rect)
 
-    if meursault_skill_description_render[0] is True:
+    if (meursault_skill_description_render[0] is True or meursault_skill_description_render_clicked[0] is True) and \
+            meursault_skill_clicked is False:
         screen.blit(pygame.image.load("Meursault S1 Description.png"), (200, 50))
 
-    if meursault_skill_description_render[1] is True:
+    elif (meursault_skill_description_render[1] is True or meursault_skill_description_render_clicked[1] is True) and \
+            meursault_skill_clicked is False:
         screen.blit(pygame.image.load("Meursault S2 Description.png"), (200, 50))
 
-    if meursault_skill_description_render[2] is True:
+    elif (meursault_skill_description_render[2] is True or meursault_skill_description_render_clicked[2] is True) and \
+            meursault_skill_clicked is False:
         screen.blit(pygame.image.load("Meursault S3 Description.png"), (200, 50))
 
     if trash_crab_skill_description_render[0] is True:
