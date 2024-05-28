@@ -96,10 +96,10 @@ meursault_s3 = AttackSkill(25, 545, "S3", "Meursault ")
 meursault_skills_attributes = ((2, 4, 3), (1, 9, 6), (4, 2, 4))
 
 trash_crab = TrashCrab(800, 450)
-trash_crab_gwah = AttackSkill(1075, 20, "Gwah", "Trash Crab ")
-trash_crab_gwaaah = AttackSkill(1075, 195, "Gwaaah", "Trash Crab ")
-trash_crab_shell_tackle = AttackSkill(1075, 370, "Shell Tackle", "Trash Crab ")
-trash_crab_foaming = AttackSkill(1075, 545, "Foaming", "Trash Crab ")
+trash_crab_gwah = AttackSkill(1075, 20, "S1", "Trash Crab ")
+trash_crab_gwaaah = AttackSkill(1075, 195, "S2", "Trash Crab ")
+trash_crab_shell_tackle = AttackSkill(1075, 370, "S3", "Trash Crab ")
+trash_crab_foaming = AttackSkill(1075, 545, "S4", "Trash Crab ")
 # Per tuple, the attributes go (coins, coin_power, base_power)
 # First tuple in the tuple is Gwah, second is Gwaaah, third is Shell tackle, fourth is Foaming
 trash_crab_skill_attributes = ((2, 2, 2), (3, 2, 3), (1, 6, 3), (1, 7, 4))
@@ -110,7 +110,7 @@ trash_crab_skill_description_render = [False, False, False, False]
 meursault_skill_description_render_clicked = [False, False, False]
 meursault_skill_clicked = False
 trash_crab_skill_description_render_clicked = [False, False, False, False]
-trash_crab_skill_clciked = False
+trash_crab_skill_clicked = False
 
 # Clicking on the appropriate skill would have that skill be used, and the associated animation if the attack hits.
 
@@ -152,7 +152,12 @@ while run:
                         meursault_skill_clicked = True
                         meursault_skill_description_render_clicked = [False, False, False]
                         meursault_skill_description_render_clicked[i] = True
-                        print(i)
+
+                for i in range(len(trash_crab_skill_description_render)):
+                    if trash_crab_skill_description_render[i] is True:
+                        trash_crab_skill_clicked = True
+                        trash_crab_skill_description_render_clicked = [False, False, False, False]
+                        trash_crab_skill_description_render_clicked[i] = True
 
         if event.type == pygame.QUIT:  # If user clicked close
             run = False
@@ -170,29 +175,30 @@ while run:
     screen.blit(trash_crab_shell_tackle.image, trash_crab_shell_tackle.rect)
     screen.blit(trash_crab_foaming.image, trash_crab_foaming.rect)
 
-    if (meursault_skill_description_render[0] is True or meursault_skill_description_render_clicked[0] is True) and \
-            meursault_skill_clicked is False:
-        screen.blit(pygame.image.load("Meursault S1 Description.png"), (200, 50))
+    # Blitting for Meursault's skills
+    if meursault_skill_clicked is True:
+        for i in range(len(meursault_skill_description_render_clicked)):
+            if meursault_skill_description_render_clicked[i] is True:
+                screen.blit(pygame.image.load("Meursault S" + str(i + 1) + " Description.png"), (200, 50))
 
-    elif (meursault_skill_description_render[1] is True or meursault_skill_description_render_clicked[1] is True) and \
-            meursault_skill_clicked is False:
-        screen.blit(pygame.image.load("Meursault S2 Description.png"), (200, 50))
+    else:
+        for i in range(len(meursault_skill_description_render)):
+            if meursault_skill_description_render[i] is True:
+                screen.blit(pygame.image.load("Meursault S" + str(i + 1) + " Description.png"), (200, 50))
 
-    elif (meursault_skill_description_render[2] is True or meursault_skill_description_render_clicked[2] is True) and \
-            meursault_skill_clicked is False:
-        screen.blit(pygame.image.load("Meursault S3 Description.png"), (200, 50))
+    # Blitting for trash crab's skills
+    if trash_crab_skill_clicked is True:
+        for i in range(len(trash_crab_skill_description_render_clicked)):
+            if trash_crab_skill_description_render_clicked[i] is True:
+                screen.blit(pygame.image.load("Trash Crab S" + str(i + 1) + " Description.png"), (800, 50))
 
-    if trash_crab_skill_description_render[0] is True:
-        screen.blit(pygame.image.load("Trash Crab Gwah Description.png"), (800, 50))
+    else:
+        for i in range(len(trash_crab_skill_description_render)):
+            if trash_crab_skill_description_render[i] is True:
+                screen.blit(pygame.image.load("Trash Crab S" + str(i + 1) + " Description.png"), (800, 50))
 
-    if trash_crab_skill_description_render[1] is True:
-        screen.blit(pygame.image.load("Trash Crab Gwaaah Description.png"), (800, 50))
-
-    if trash_crab_skill_description_render[2] is True:
-        screen.blit(pygame.image.load("Trash Crab Shell Tackle Description.png"), (800, 50))
-
-    if trash_crab_skill_description_render[3] is True:
-        screen.blit(pygame.image.load("Trash Crab Foaming Description.png"), (800, 50))
+    if meursault_skill_clicked is True and trash_crab_skill_clicked is True:
+        screen.blit(pygame.image.load("Combat Start.png"), (450, 400))
 
     pygame.display.update()
 
