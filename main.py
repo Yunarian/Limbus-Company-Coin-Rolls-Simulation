@@ -199,7 +199,7 @@ while run:
 
     if meursault_skill_clicked is True and trash_crab_skill_clicked is True:
         screen.blit(pygame.image.load("Combat Start.png"), (450, 400))
-
+    meursault.switch_image()
     pygame.display.update()
 
 pygame.quit()
