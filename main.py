@@ -3,6 +3,7 @@ import random
 from meursault import Meursault
 from trash_crab import TrashCrab
 from attack_skills import AttackSkill
+from combat_starter import CombatStarter
 
 # Setting up fonts
 pygame.init()
@@ -112,6 +113,9 @@ meursault_skill_clicked = False
 trash_crab_skill_description_render_clicked = [False, False, False, False]
 trash_crab_skill_clicked = False
 
+combat_starter = CombatStarter(450, 400)
+combat_ready = False
+
 # Clicking on the appropriate skill would have that skill be used, and the associated animation if the attack hits.
 
 # Pygame loop
@@ -159,6 +163,14 @@ while run:
                         trash_crab_skill_description_render_clicked = [False, False, False, False]
                         trash_crab_skill_description_render_clicked[i] = True
 
+                if combat_starter.rect.collidepoint(event.pos) and combat_ready is True:
+                    combat_start = True
+                    combat_ready = False
+                    meursault_skill_clicked = False
+                    trash_crab_skill_clicked = False
+
+                    meursault.switch_image()
+
         if event.type == pygame.QUIT:  # If user clicked close
             run = False
 
@@ -198,8 +210,9 @@ while run:
                 screen.blit(pygame.image.load("Trash Crab S" + str(i + 1) + " Description.png"), (800, 50))
 
     if meursault_skill_clicked is True and trash_crab_skill_clicked is True:
-        screen.blit(pygame.image.load("Combat Start.png"), (450, 400))
-    meursault.switch_image()
+        combat_ready = True
+        screen.blit(combat_starter.image, combat_starter.rect)
+
     pygame.display.update()
 
 pygame.quit()
