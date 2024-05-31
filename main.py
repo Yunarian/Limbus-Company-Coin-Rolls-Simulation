@@ -114,7 +114,9 @@ trash_crab_skill_description_render_clicked = [False, False, False, False]
 trash_crab_skill_clicked = False
 
 combat_starter = CombatStarter(450, 400)
+combat_start = False
 combat_ready = False
+meursault_speed = 0
 
 # Clicking on the appropriate skill would have that skill be used, and the associated animation if the attack hits.
 
@@ -175,6 +177,15 @@ while run:
             run = False
 
     screen.fill((100, 100, 100))
+
+    if meursault.rect.colliderect(trash_crab.rect):
+        meursault.move("Left")
+        meursault.delta = 1
+
+    else:
+        meursault.move("Right")
+        # meursault.delta += 0.05
+        # print(meursault.delta)
 
     screen.blit(meursault.image, meursault.rect)
     screen.blit(meursault_s1.image, meursault_s1.rect)
