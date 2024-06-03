@@ -9,17 +9,13 @@ class Meursault:
         self.image_tuple = ("Meursault.png", "Meursault Moving.png", "Meursault Clash.png")
         self.image = pygame.image.load(self.image_tuple[0])
         self.image_number = 0
-        self.delta = 1
+        self.delta = 5
 
         self.image_size = self.image.get_size()
         self.rect = pygame.Rect(self.x, self.y, self.image_size[0], self.image_size[1])
 
-    def switch_image(self):
-        if self.image_number == 0:
-            self.image_number = 1
-
-        elif self.image_number == 1:
-            self.image_number = 0
+    def switch_image(self, changed_to_image_number):
+        self.image_number = changed_to_image_number
 
         self.image = pygame.image.load(self.image_tuple[self.image_number])
 
@@ -28,6 +24,6 @@ class Meursault:
             self.x += self.delta
 
         elif direction == "Left":
-            self.x -= 125 * self.delta
+            self.x -= 200
 
         self.rect = pygame.Rect(self.x, self.y, self.image_size[0], self.image_size[1])

@@ -116,40 +116,45 @@ trash_crab_skill_clicked = False
 combat_starter = CombatStarter(450, 400)
 combat_start = False
 combat_ready = False
-meursault_speed = 0
+frame = 0
+meursault_movement_stopped_frame = 0
 
 # Clicking on the appropriate skill would have that skill be used, and the associated animation if the attack hits.
 
 # Pygame loop
 while run:
-
+    pygame.time.Clock().tick(120)
     for event in pygame.event.get():  # User did something
         # Mouse hover-over detection with Meursault's skills
         # first element is s1, second is s2, third is s3
         meursault_skill_description_render = [False, False, False]
-        if meursault_s1.rect.collidepoint(pygame.mouse.get_pos()):
-            meursault_skill_description_render[0] = True
 
-        if meursault_s2.rect.collidepoint(pygame.mouse.get_pos()):
-            meursault_skill_description_render[1] = True
+        if combat_start is False:
+            if meursault_s1.rect.collidepoint(pygame.mouse.get_pos()):
+                meursault_skill_description_render[0] = True
 
-        if meursault_s3.rect.collidepoint(pygame.mouse.get_pos()):
-            meursault_skill_description_render[2] = True
+            if meursault_s2.rect.collidepoint(pygame.mouse.get_pos()):
+                meursault_skill_description_render[1] = True
+
+            if meursault_s3.rect.collidepoint(pygame.mouse.get_pos()):
+                meursault_skill_description_render[2] = True
 
         # Mouse hover-over detection with trash crab skills
         # first is gwah, second is gwaaah, third is shell tackle, fourth is foaming.
         trash_crab_skill_description_render = [False, False, False, False]
-        if trash_crab_gwah.rect.collidepoint(pygame.mouse.get_pos()):
-            trash_crab_skill_description_render[0] = True
 
-        if trash_crab_gwaaah.rect.collidepoint(pygame.mouse.get_pos()):
-            trash_crab_skill_description_render[1] = True
+        if combat_start is False:
+            if trash_crab_gwah.rect.collidepoint(pygame.mouse.get_pos()):
+                trash_crab_skill_description_render[0] = True
 
-        if trash_crab_shell_tackle.rect.collidepoint(pygame.mouse.get_pos()):
-            trash_crab_skill_description_render[2] = True
+            if trash_crab_gwaaah.rect.collidepoint(pygame.mouse.get_pos()):
+                trash_crab_skill_description_render[1] = True
 
-        if trash_crab_foaming.rect.collidepoint(pygame.mouse.get_pos()):
-            trash_crab_skill_description_render[3] = True
+            if trash_crab_shell_tackle.rect.collidepoint(pygame.mouse.get_pos()):
+                trash_crab_skill_description_render[2] = True
+
+            if trash_crab_foaming.rect.collidepoint(pygame.mouse.get_pos()):
+                trash_crab_skill_description_render[3] = True
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
@@ -171,8 +176,7 @@ while run:
                     meursault_skill_clicked = False
                     trash_crab_skill_clicked = False
 
-                    meursault.switch_image()
-
+                    meursault.switch_image(1)
         if event.type == pygame.QUIT:  # If user clicked close
             run = False
 
@@ -180,12 +184,12 @@ while run:
 
     if meursault.rect.colliderect(trash_crab.rect):
         meursault.move("Left")
-        meursault.delta = 1
+        meursault.switch_image(2)
+        meursault_movement_stopped_frame = frame
 
-    else:
+    elif (combat_start is True and frame >= meursault_movement_stopped_frame + 30) or meursault.image_number == 1:
         meursault.move("Right")
-        # meursault.delta += 0.05
-        # print(meursault.delta)
+        meursault.switch_image(1)
 
     screen.blit(meursault.image, meursault.rect)
     screen.blit(meursault_s1.image, meursault_s1.rect)
@@ -225,5 +229,7 @@ while run:
         screen.blit(combat_starter.image, combat_starter.rect)
 
     pygame.display.update()
+
+    frame += 1
 
 pygame.quit()
