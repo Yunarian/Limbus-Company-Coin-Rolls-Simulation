@@ -6,7 +6,7 @@ class AttackSkill:
     def __init__(self, x, y, skill, skill_user):
         self.x = x
         self.y = y
-        self.skill_used = skill_user + skill + ".png"
+        self.skill_used = "Images/" + skill_user + skill + ".png"
 
         self.image = pygame.image.load(self.skill_used)
 

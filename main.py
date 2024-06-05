@@ -187,7 +187,7 @@ while run:
         meursault.switch_image(2)
         meursault_movement_stopped_frame = frame
 
-    elif (combat_start is True and frame >= meursault_movement_stopped_frame + 30) or meursault.image_number == 1:
+    elif (combat_start is True and frame >= meursault_movement_stopped_frame + 40) or meursault.image_number == 1:
         meursault.move("Right")
         meursault.switch_image(1)
 
@@ -206,23 +206,23 @@ while run:
     if meursault_skill_clicked is True:
         for i in range(len(meursault_skill_description_render_clicked)):
             if meursault_skill_description_render_clicked[i] is True:
-                screen.blit(pygame.image.load("Meursault S" + str(i + 1) + " Description.png"), (200, 50))
+                screen.blit(pygame.image.load("Images/Meursault S" + str(i + 1) + " Description.png"), (200, 50))
 
     else:
         for i in range(len(meursault_skill_description_render)):
             if meursault_skill_description_render[i] is True:
-                screen.blit(pygame.image.load("Meursault S" + str(i + 1) + " Description.png"), (200, 50))
+                screen.blit(pygame.image.load("Images/Meursault S" + str(i + 1) + " Description.png"), (200, 50))
 
     # Blitting for trash crab's skills
     if trash_crab_skill_clicked is True:
         for i in range(len(trash_crab_skill_description_render_clicked)):
             if trash_crab_skill_description_render_clicked[i] is True:
-                screen.blit(pygame.image.load("Trash Crab S" + str(i + 1) + " Description.png"), (800, 50))
+                screen.blit(pygame.image.load("Images/Trash Crab S" + str(i + 1) + " Description.png"), (800, 50))
 
     else:
         for i in range(len(trash_crab_skill_description_render)):
             if trash_crab_skill_description_render[i] is True:
-                screen.blit(pygame.image.load("Trash Crab S" + str(i + 1) + " Description.png"), (800, 50))
+                screen.blit(pygame.image.load("Images/Trash Crab S" + str(i + 1) + " Description.png"), (800, 50))
 
     if meursault_skill_clicked is True and trash_crab_skill_clicked is True:
         combat_ready = True
