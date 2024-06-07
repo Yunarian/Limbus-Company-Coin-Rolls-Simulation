@@ -93,8 +93,8 @@ meursault_s1 = AttackSkill(25, 25, "S1", "Meursault ")
 meursault_s2 = AttackSkill(25, 285, "S2", "Meursault ")
 meursault_s3 = AttackSkill(25, 545, "S3", "Meursault ")
 # Per tuple, the attributes go (coins, coin_power, base_power)
-# First tuple in the tuple is s1, second is s2, third is s3
-meursault_skills_attributes = ((2, 4, 3), (1, 9, 6), (4, 2, 4))
+# First list in the tuple is s1, second is s2, third is s3
+meursault_skills_attributes = ([2, 4, 3], [1, 9, 6], [4, 2, 4])
 
 trash_crab = TrashCrab(800, 450)
 trash_crab_gwah = AttackSkill(1075, 20, "S1", "Trash Crab ")
@@ -102,8 +102,8 @@ trash_crab_gwaaah = AttackSkill(1075, 195, "S2", "Trash Crab ")
 trash_crab_shell_tackle = AttackSkill(1075, 370, "S3", "Trash Crab ")
 trash_crab_foaming = AttackSkill(1075, 545, "S4", "Trash Crab ")
 # Per tuple, the attributes go (coins, coin_power, base_power)
-# First tuple in the tuple is Gwah, second is Gwaaah, third is Shell tackle, fourth is Foaming
-trash_crab_skill_attributes = ((2, 2, 2), (3, 2, 3), (1, 6, 3), (1, 7, 4))
+# First list in the tuple is Gwah, second is Gwaaah, third is Shell tackle, fourth is Foaming
+trash_crab_skills_attributes = ([2, 2, 2], [3, 2, 3], [1, 6, 3], [1, 7, 4])
 
 meursault_skill_description_render = [False, False, False]
 trash_crab_skill_description_render = [False, False, False, False]
@@ -132,12 +132,15 @@ while run:
         if combat_start is False:
             if meursault_s1.rect.collidepoint(pygame.mouse.get_pos()):
                 meursault_skill_description_render[0] = True
+                meursault_selected_skill_attributes = meursault_skills_attributes[0]
 
-            if meursault_s2.rect.collidepoint(pygame.mouse.get_pos()):
+            elif meursault_s2.rect.collidepoint(pygame.mouse.get_pos()):
                 meursault_skill_description_render[1] = True
+                meursault_selected_skill_attributes = meursault_skills_attributes[1]
 
-            if meursault_s3.rect.collidepoint(pygame.mouse.get_pos()):
+            elif meursault_s3.rect.collidepoint(pygame.mouse.get_pos()):
                 meursault_skill_description_render[2] = True
+                meursault_selected_skill_attributes = meursault_skills_attributes[2]
 
         # Mouse hover-over detection with trash crab skills
         # first is gwah, second is gwaaah, third is shell tackle, fourth is foaming.
@@ -146,15 +149,19 @@ while run:
         if combat_start is False:
             if trash_crab_gwah.rect.collidepoint(pygame.mouse.get_pos()):
                 trash_crab_skill_description_render[0] = True
+                trash_crab_selected_skill_attributes = trash_crab_skills_attributes[0]
 
-            if trash_crab_gwaaah.rect.collidepoint(pygame.mouse.get_pos()):
+            elif trash_crab_gwaaah.rect.collidepoint(pygame.mouse.get_pos()):
                 trash_crab_skill_description_render[1] = True
+                trash_crab_selected_skill_attributes = trash_crab_skills_attributes[1]
 
-            if trash_crab_shell_tackle.rect.collidepoint(pygame.mouse.get_pos()):
+            elif trash_crab_shell_tackle.rect.collidepoint(pygame.mouse.get_pos()):
                 trash_crab_skill_description_render[2] = True
+                trash_crab_selected_skill_attributes = trash_crab_skills_attributes[2]
 
-            if trash_crab_foaming.rect.collidepoint(pygame.mouse.get_pos()):
+            elif trash_crab_foaming.rect.collidepoint(pygame.mouse.get_pos()):
                 trash_crab_skill_description_render[3] = True
+                trash_crab_selected_skill_attributes = trash_crab_skills_attributes[3]
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
@@ -173,10 +180,9 @@ while run:
                 if combat_starter.rect.collidepoint(event.pos) and combat_ready is True:
                     combat_start = True
                     combat_ready = False
-                    meursault_skill_clicked = False
-                    trash_crab_skill_clicked = False
-
                     meursault.switch_image(1)
+                    clash_calculate(0, meursault_selected_skill_attributes, 0, trash_crab_selected_skill_attributes)
+
         if event.type == pygame.QUIT:  # If user clicked close
             run = False
 
@@ -224,7 +230,7 @@ while run:
             if trash_crab_skill_description_render[i] is True:
                 screen.blit(pygame.image.load("Images/Trash Crab S" + str(i + 1) + " Description.png"), (800, 50))
 
-    if meursault_skill_clicked is True and trash_crab_skill_clicked is True:
+    if (meursault_skill_clicked is True and trash_crab_skill_clicked is True) and combat_start is False:
         combat_ready = True
         screen.blit(combat_starter.image, combat_starter.rect)
 
