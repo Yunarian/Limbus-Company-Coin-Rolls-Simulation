@@ -19,24 +19,31 @@ run = True
 
 
 # Functions used in the pygame loop
-# Takes a tuple and an integer as parameters.
+# Takes two integers
+
+def heads_tails_rolls(sanity, coins):
+    coin_side_rolls = []
+
+    for i in range(coins):
+        if random.randint(1, 100) <= 50 + sanity:
+            coin_side_rolls.append("Heads")
+        else:
+            coin_side_rolls.append("Tails")
+
+    return coin_side_rolls
+
+
+# Takes a list and a tuple as parameters.
+# The first element is a list, the second is a tuple
 # the last element of the tuple and sanity generate which side of the coin was rolled.
 # The first two elements of the tuple generate which values were rolled
 # skill_attributes = (coins, coin_power, base_power)
-def coin_rolls(sanity, skill_attributes):
-    coin_side_roll = []
-
-    for i in range(skill_attributes[0]):
-        if random.randint(1, 100) <= 50 + sanity:
-            coin_side_roll.append("Heads")
-        else:
-            coin_side_roll.append("Tails")
-
+def coin_rolls(coin_side_rolls, skill_attributes):
     attack_rolls = []
     current_attack_power = skill_attributes[2]
 
-    for i in range(len(coin_side_roll)):
-        if coin_side_roll[i] == "Heads":
+    for i in range(len(coin_side_rolls)):
+        if coin_side_rolls[i] == "Heads":
             current_attack_power += skill_attributes[1]
 
         attack_rolls.append(current_attack_power)
@@ -113,11 +120,17 @@ meursault_skill_clicked = False
 trash_crab_skill_description_render_clicked = [False, False, False, False]
 trash_crab_skill_clicked = False
 
+coin_heads = pygame.image.load("Images/Coin Heads.png")
+coin_tails = pygame.image.load("Images/Coin Tails.png")
 combat_starter = CombatStarter(450, 400)
 combat_start = False
 combat_ready = False
 frame = 0
 meursault_movement_stopped_frame = 0
+meursault_coin_side_rolls = []
+trash_crab_coin_side_rolls = []
+coinY = 50
+meursault_coinX = 200
 
 # Clicking on the appropriate skill would have that skill be used, and the associated animation if the attack hits.
 
@@ -181,7 +194,7 @@ while run:
                     combat_start = True
                     combat_ready = False
                     meursault.switch_image(1)
-                    clash_calculate(0, meursault_selected_skill_attributes, 0, trash_crab_selected_skill_attributes)
+                    # clash_calculate(0, meursault_selected_skill_attributes, 0, trash_crab_selected_skill_attributes)
 
         if event.type == pygame.QUIT:  # If user clicked close
             run = False
@@ -192,6 +205,8 @@ while run:
         meursault.move("Left")
         meursault.switch_image(2)
         meursault_movement_stopped_frame = frame
+        meursault_coin_side_rolls = heads_tails_rolls(0, meursault_skills_attributes[selected_meursault_skill][0])
+        trash_crab_coin_side_rolls = heads_tails_rolls(0, trash_crab_skills_attributes[selected_trash_crab_skill][0])
 
     elif (combat_start is True and frame >= meursault_movement_stopped_frame + 40) or meursault.image_number == 1:
         meursault.move("Right")
@@ -213,26 +228,45 @@ while run:
         for i in range(len(meursault_skill_description_render_clicked)):
             if meursault_skill_description_render_clicked[i] is True:
                 screen.blit(pygame.image.load("Images/Meursault S" + str(i + 1) + " Description.png"), (200, 50))
+                selected_meursault_skill = i
 
     else:
         for i in range(len(meursault_skill_description_render)):
             if meursault_skill_description_render[i] is True:
                 screen.blit(pygame.image.load("Images/Meursault S" + str(i + 1) + " Description.png"), (200, 50))
+                selected_meursault_skill = i
 
     # Blitting for trash crab's skills
     if trash_crab_skill_clicked is True:
         for i in range(len(trash_crab_skill_description_render_clicked)):
             if trash_crab_skill_description_render_clicked[i] is True:
                 screen.blit(pygame.image.load("Images/Trash Crab S" + str(i + 1) + " Description.png"), (800, 50))
+                selected_trash_crab_skill = i
 
     else:
         for i in range(len(trash_crab_skill_description_render)):
             if trash_crab_skill_description_render[i] is True:
                 screen.blit(pygame.image.load("Images/Trash Crab S" + str(i + 1) + " Description.png"), (800, 50))
+                selected_trash_crab_skill = i
 
     if (meursault_skill_clicked is True and trash_crab_skill_clicked is True) and combat_start is False:
         combat_ready = True
         screen.blit(combat_starter.image, combat_starter.rect)
+
+    if combat_start is True:
+        for i in range(len(meursault_coin_side_rolls)):
+            if meursault_coin_side_rolls[i] == "Heads":
+                screen.blit(coin_heads, (300 + 27 * i, coinY))
+
+            elif meursault_coin_side_rolls[i] == "Tails":
+                screen.blit(coin_tails, (300 + 27 * i, coinY))
+
+        for i in range(len(trash_crab_coin_side_rolls)):
+            if trash_crab_coin_side_rolls[i] == "Heads":
+                screen.blit(coin_heads, (900 + 27 * i, coinY))
+
+            elif trash_crab_coin_side_rolls[i] == "Tails":
+                screen.blit(coin_tails, (900 + 27 * i, coinY))
 
     pygame.display.update()
 
