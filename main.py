@@ -256,17 +256,17 @@ while run:
     if combat_start is True:
         for i in range(len(meursault_coin_side_rolls)):
             if meursault_coin_side_rolls[i] == "Heads":
-                screen.blit(coin_heads, (300 + 27 * i, coinY))
+                screen.blit(coin_heads, (302 + 27 * i, coinY))
 
             elif meursault_coin_side_rolls[i] == "Tails":
-                screen.blit(coin_tails, (300 + 27 * i, coinY))
+                screen.blit(coin_tails, (302 + 27 * i, coinY))
 
         for i in range(len(trash_crab_coin_side_rolls)):
             if trash_crab_coin_side_rolls[i] == "Heads":
-                screen.blit(coin_heads, (900 + 27 * i, coinY))
+                screen.blit(coin_heads, (902 + 27 * i, coinY))
 
             elif trash_crab_coin_side_rolls[i] == "Tails":
-                screen.blit(coin_tails, (900 + 27 * i, coinY))
+                screen.blit(coin_tails, (902 + 27 * i, coinY))
 
     pygame.display.update()
 
